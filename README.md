@@ -26,7 +26,7 @@ There are multiple ways the service can be started. If you face a problem with o
 2. Start a container with the image `docker run -p 5000:5000 --name backend_flask_app backend_flask_image`
 3. To verify if the service is working, use the curl commands in the file `curl_win_commands.txt` (this is formatted for windows cmd prompts, edit as necessary for other terminals) or alternatively create a similar request in postman or other tools. The server should repond with results for the requested month.
 
-### Running the application through Docker
+### Running the application through flask directly
 ---------------
 If you prefer to not use Docker to start the service, you can start the flask application locally.
 
