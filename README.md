@@ -1,7 +1,7 @@
 # simple_RNN_predictor
 
 This project implements a Recurrent Neural Network model using PyTorch for predicting a simple time series sequence.
-It also supports inference through a frontend developed using Streamlit and a backend web service developed using flask.
+It also supports inference through an UI developed using Streamlit and a backend web service developed using flask.
 
 If you face any problems during setup steps detailed below, you can reach out to me at `deeraj.nachimuthu@gmail.com` 
 Download this project and go to the root directory of the project.
