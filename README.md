@@ -4,6 +4,7 @@ This project implements a Recurrent Neural Network model using PyTorch for predi
 It also supports inference through an UI developed using Streamlit and a backend web service developed using flask.
 
 If you face any problems during setup steps detailed below, you can reach out to me at `deeraj.nachimuthu@gmail.com` 
+
 Download this project and go to the root directory of the project.
 
 ## Assumptions
