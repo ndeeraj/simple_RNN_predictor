@@ -4,12 +4,43 @@ This project implements a Recurrent Neural Network model using PyTorch for predi
 It also supports inference through a frontend developed using Streamlit and a backend web service developed using flask.
 
 If you face any problems during setup steps detailed below, you can reach out to me at `deeraj.nachimuthu@gmail.com` 
+Download this project and go to the root directory of the project.
 
 ## Starting the backend prediction service
 ---------------
+There are multiple ways the service can be started. If you face a problem with one approach, use the other one.
+
+### Running the application through Docker
+---------------
+#### Prerequisites:
+- Docker
+
+1. From the root directory of the project, build the docker image `docker build -t backend_flask_image .`
+2. Start a container with the image `docker run -p 5000:5000 --name backend_flask_app backend_flask_image`
+3. To verify if the service is working, use the curl commands in the file `curl_win_commands.txt` (this is formatted for windows cmd prompts, edit as necessary for other terminals) or alternatively create a similar request in postman or other tools. The server should repond with results for the requested month.
+
+### Running the application through Docker
+---------------
+If you prefer to not use Docker to start the service, you can start the flask application locally.
+
+#### Prerequisites:
+- Install the dependencies in requirements.txt using `pip install -r requirements.txt`
+
+1. From the root directory of the project, run the flask app `flask --app "app:create_app()" run --port 5000`
+2. To verify if the service is working, use the curl commands in the file `curl_win_commands.txt` (this is formatted for windows cmd prompts, edit as necessary for other terminals) or alternatively create a similar request in postman or other tools. The server should repond with results for the requested month.
+
+### If both approaches failed do this
+
+Run the model training script directly
+
+#### Prerequisites:
+- Install the dependencies in requirements.txt using `pip install -r requirements.txt`
+
+1. Go to lstmregr.py and run the file.
+2. The script should tune the model and create a weights file, which can be manually loaded and used for inference as shown in `demo.ipynb`
 
 
-- OpenCV python
+ OpenCV python
 - Numpy
 - MeshLab / open3D - optional, only if you want to visualize the point cloud
 
