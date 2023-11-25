@@ -55,7 +55,7 @@ Note:
 #### Prerequisites:
 - needs Streamlit and altair packages, install using `pip install streamlit`, `pip install altair`
 
-  1. From the root directory of the project, run the application using `streamlit run front_end_app.py`
-  2. If successful, a browser window should open where you can interact with the service by entering "year",  "month", "past data" (Optional: at least 15 values must be entered as comma separated values to make predictions for the "year" and "month" requested.)
+1. From the root directory of the project, run the application using `streamlit run front_end_app.py`
+2. If successful, a browser window should open where you can interact with the service by entering "year",  "month", "past data" (Optional: at least 15 values must be entered as comma separated values to make predictions for the "year" and "month" requested.)
 
 
