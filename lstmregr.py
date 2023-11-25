@@ -183,7 +183,7 @@ class LSTM(nn.Module):
 
         return {"loss": test_loss / len(dl)}
 
-    def predict_for_month(self, month: int = 1, year: int = 2023, show_plot: bool = False) -> dict:
+    def predict_for_month(self, month: int = 1, year: int = 2022, show_plot: bool = False) -> dict:
         """
         Makes the predictions for the requested month and date.
 
@@ -199,8 +199,8 @@ class LSTM(nn.Module):
         if not self._check_if_data_is_loaded():
             warnings.warn("Setup the data by calling load_data method.")
             return
-        if year < 2023 or year > 2024:
-            raise NotImplementedError("The prediction works only for future and not past 2024.")
+        if year < 2022 or year > 2023:
+            raise NotImplementedError("The prediction works only for future and not past 2023.")
         if month < 1 or month > 12:
             raise RuntimeError("Not a valid month. Value should be between 1-12")
         try:
@@ -219,7 +219,7 @@ class LSTM(nn.Module):
             num_predictions = int(((req_start_date - data_end_date) \
                                    + timedelta(days=calendar.monthrange(year, month)[1] - 1)).days)
 
-            curr_date = date(2023, 1, 1)
+            curr_date = date(2022, 1, 1)
             while num_predictions != 0:
                 with torch.no_grad():
                     self.hidden_cell = (
@@ -247,7 +247,7 @@ class LSTM(nn.Module):
             raise RuntimeError(f'''Error while trying to predict for the provided month {month}, 
             year {year}.\nError details:\n\n{str(exp)}''')
 
-    def predict_for_month_with_prev(self, prev_data: list, month: int = 1, year: int = 2023,
+    def predict_for_month_with_prev(self, prev_data: list, month: int = 1, year: int = 2022,
                                     show_plot: bool = False) -> dict:
         """
         Makes the predictions for the requested month and date using the provided previous data

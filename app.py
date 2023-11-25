@@ -44,7 +44,7 @@ def predict_with_data():
     Makes the predictions for the requested month and date using the previous data passed in the
     data json
     For a successful request, the data json should follow below constraints on the keys:
-    "year": (int) year > 2023
+    "year": (int) year > 2021
     "month": (int) 1-12
     "prev_data": (list of int) integers in a list of size 15 (window length used by the RNN)
 
@@ -71,7 +71,7 @@ def predict_yy_mm():
     """
     Makes the predictions for the requested month and date in the data json
     For a successful request, the data json should follow below constraints on the keys:
-    "year": (int) year 2023 or 2024
+    "year": (int) year 2022 or 2023
     "month": (int) 1-12
 
     :return:

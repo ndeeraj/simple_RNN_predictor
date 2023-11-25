@@ -30,7 +30,7 @@ def display_results(disp_results: dict):
 
 
 window = 15
-year = st.number_input('Year:', value=2023, format="%d", min_value=2023)
+year = st.number_input('Year:', value=2022, format="%d", min_value=2022)
 month = st.number_input('Month:', value=1, format="%d", min_value=1, max_value=12)
 text = st.text_input('Past data (comma separated values):',
                      f"enter at least {window} values to predict using this data")
@@ -44,8 +44,8 @@ if len(text.strip()) > 0:
 
 if st.button("Predict", type="primary"):
     # get_predictions_from_service = False
-    if len(prev_data) != window and year > 2024:
-        st.error("Without entering previous data, you can only predict for 2023 and 2024. \
+    if len(prev_data) != window and year > 2023:
+        st.error("Without entering previous data, you can only predict for 2022 and 2023. \
         Because the data used for developing the model is not extensive to predict meaningfully \
         beyond that point.")
     elif len(prev_data) == 0:
