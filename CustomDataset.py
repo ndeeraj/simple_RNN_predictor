@@ -10,9 +10,25 @@ from torch.utils.data import Dataset
 
 
 class CustomDataSt(Dataset):
+    """
+    Custom dataset class that primarily takes care of sequencing the data into instances required
+    for training the RNN model in lstmregr.py
+    """
+    # The numbers are normalized before feeding to the model so that there are no problems with
+    # overflow during operations. To normalize and un-normalize, the normalizer from train dataset
+    # is used at different places.
     normalizer = None
 
     def __init__(self, data_frame, normalizer=None, window=5, plot_data=False):
+        """
+        Initializes the class based on the provided dataframe.
+
+        :param data_frame: pandas dataframe of the data.
+        :param normalizer: during creating of test and validation dataset, pass in the normalizer
+                        instance from training dataset.
+        :param window: the length of sequence of each instance.
+        :param plot_data: if true, plots the data.
+        """
         self.df = data_frame
         self.window = window
         self.normalizer = normalizer
@@ -37,6 +53,11 @@ class CustomDataSt(Dataset):
         return features, output
 
     def create_inout_sequences(self):
+        """
+        normalizes the data values and creates sequences according to the window size.
+
+        :return: nothing
+        """
         window = self.window
         self.unnorm_val = np.array(self.df["Receipt_Count"]).astype('float64')
         if self.normalizer is None:

@@ -7,8 +7,7 @@ import numpy
 from datetime import date
 import calendar
 from datetime import timedelta
-from pandas import read_csv
-from CustomDataset import CustomDataSt as cus_dtst
+
 import torch
 import torch.nn as nn
 
@@ -21,6 +20,15 @@ from CustomDataset import split_data_to_dataframes, CustomDataSt
 
 
 class LSTM(nn.Module):
+    """
+    Represents the RNN model.
+    Exposes methods to train and evaluate the model with train, test, validation datasets
+    Also, provides two ways to predict future values.
+
+    General flow:
+        Initialize, load the data, train the model, optionally evaluate the model,
+        predict using the model.
+    """
     train_dtst = None
     val_dtst = None
     test_dtst = None
@@ -28,10 +36,21 @@ class LSTM(nn.Module):
     train_df = None
     test_df = None
     val_df = None
+    # only uses cache for predicting with just year and month because the predictions are not going
+    # to change between consecutive calls with same year, month values.
     cache_results = dict()
 
-    def __init__(self, input_size=1, num_layers=1, hidden_layer_size=64, output_size=1,
-                 window: int = 15):
+    def __init__(self, input_size: int = 1, num_layers: int = 1, hidden_layer_size: int = 64,
+                 output_size: int = 1, window: int = 15):
+        """
+        Initializes the model.
+
+        :param input_size: number of expected features in a single instance.
+        :param num_layers: number of recurrent layers.
+        :param hidden_layer_size: size of the features in the hidden layers.
+        :param output_size: size of the number predictions expected from the model.
+        :param window: time steps to unravel for a single prediction.
+        """
         super().__init__()
         self.hidden_layer_size = hidden_layer_size
         self.num_layers = num_layers
@@ -42,6 +61,11 @@ class LSTM(nn.Module):
                             torch.zeros(num_layers, 1, self.hidden_layer_size, dtype=torch.double))
 
     def forward(self, input_seq):
+        """
+        does a single forward pass through the model
+        :param input_seq: sequence to push through the model.
+        :return: prediction for the input sequence
+        """
         if not self._check_if_data_is_loaded():
             warnings.warn("Setup the data by calling load_data method.")
             return
@@ -56,6 +80,15 @@ class LSTM(nn.Module):
         return not (self.train_dtst is None or self.test_dtst is None or self.val_dtst is None)
 
     def load_data(self, path_to_data_file: str, split_factor: float = 0.1):
+        """
+        loads the data in the data file into dataframes and CustomDataSt objects
+        (train, test, validation).
+
+        :param path_to_data_file: path to the data to load.
+        :param split_factor: the percentage of data that should be in test and validation set each.
+        :return: nothing. exceptions will be raised if the errors while splitting the data according
+            to the requested split percentage.
+        """
         try:
             (self.train_df, self.val_df, self.test_df) = split_data_to_dataframes(
                 path_to_data_file, split_factor)
@@ -70,7 +103,15 @@ class LSTM(nn.Module):
             raise RuntimeError(f'''Encountered error while loading the dataset.\nError details:\n
 {str(exp)}''')
 
-    def train_model(self, batch_size: int, lrn_rt: float):
+    def train_model(self, batch_size: int, lrn_rt: float) -> dict:
+        """
+        Uses the forward function and trains the model with training dataset.
+        Should load data before training the model.
+
+        :param batch_size: number of batches to pass through the model in a single forward pass.
+        :param lrn_rt: learning rate for the backward propagation.
+        :return: loss per batch
+        """
         if not self._check_if_data_is_loaded():
             warnings.warn("Setup the data by calling load_data method.")
             return
@@ -106,7 +147,14 @@ class LSTM(nn.Module):
 
         return {"loss": loss_val / num_batches}
 
-    def evaluate_model(self, validation: bool = False, batch_size: int = 10):
+    def evaluate_model(self, validation: bool = False, batch_size: int = 10) -> dict:
+        """
+        Evaluates the trained model with the test or validation dataset.
+
+        :param validation: (bool) if False, uses the test set to evaluate the model.
+        :param batch_size: number of batches to pass through the model in a single forward pass.
+        :return: loss per batch
+        """
         if not self._check_if_data_is_loaded():
             warnings.warn("Setup the data by calling load_data method.")
             return
@@ -135,7 +183,19 @@ class LSTM(nn.Module):
 
         return {"loss": test_loss / len(dl)}
 
-    def predict_for_month(self, month: int = 1, year: int = 2023):
+    def predict_for_month(self, month: int = 1, year: int = 2023, show_plot: bool = False) -> dict:
+        """
+        Makes the predictions for the requested month and date.
+
+        :param month: month for which the prediction should be made.
+        :param year: year for which the prediction should be made.
+        :param show_plot: whether to plot the predictions in a graph.
+
+        :return:
+            on success, dictionary with keys representing the dates for which the predictions
+            were made and values representing predicted values for the date.
+            on error during prediction, raises exceptions.
+        """
         if not self._check_if_data_is_loaded():
             warnings.warn("Setup the data by calling load_data method.")
             return
@@ -149,6 +209,8 @@ class LSTM(nn.Module):
 
             req_yy_mm = f"{year}-{month}"
             if self.cache_results.get(req_yy_mm) is not None:
+                # for repeated requests for the same yy and mm, the predictions are not going to
+                # change so using a cache.
                 self._plot_results(self.cache_results[req_yy_mm])
                 return self.cache_results[req_yy_mm]
 
@@ -177,15 +239,34 @@ class LSTM(nn.Module):
 
                     curr_date += timedelta(days=1)
                     num_predictions -= 1
-
-            self._plot_results(self.cache_results[req_yy_mm])
+            if show_plot:
+                self._plot_results(self.cache_results[req_yy_mm])
             return self.cache_results[req_yy_mm]
 
         except Exception as exp:
             raise RuntimeError(f'''Error while trying to predict for the provided month {month}, 
             year {year}.\nError details:\n\n{str(exp)}''')
 
-    def predict_for_month_with_prev(self, prev_data: list, month: int = 1, year: int = 2023):
+    def predict_for_month_with_prev(self, prev_data: list, month: int = 1, year: int = 2023,
+                                    show_plot: bool = False) -> dict:
+        """
+        Makes the predictions for the requested month and date using the provided previous data
+        points.
+
+        :param prev_data: (list of ints) previous data points to make the prediction,
+                    length should match the window initialized in the model.
+        :param month: month for which the prediction should be made.
+        :param year: year for which the prediction should be made.
+        :param show_plot: whether to plot the predictions in a graph.
+
+        :return:
+            on success, dictionary with keys representing the dates for which the predictions
+            were made and values representing predicted values for the date.
+            on error during prediction, raises exceptions.
+        """
+        if not self._check_if_data_is_loaded():
+            warnings.warn("Setup the data by calling load_data method.")
+            return
         if len(prev_data) != self.window:
             raise RuntimeError(f'''The amount of data provided should match the sequence length \
 expected by the model {self.window}''')
@@ -195,7 +276,6 @@ expected by the model {self.window}''')
             X = np.array(prev_data)
             X = self.train_dtst.normalizer.transform(X.reshape(-1, 1))
 
-            req_yy_mm = f"{year}-{month}"
             req_start_date = date(year, month, 1)
             num_predictions = int(timedelta(days=calendar.monthrange(year, month)[1]).days)
             predictions = dict()
@@ -217,7 +297,8 @@ expected by the model {self.window}''')
 
                     curr_date += timedelta(days=1)
                     num_predictions -= 1
-            self._plot_results(predictions)
+            if show_plot:
+                self._plot_results(predictions)
             return predictions
 
         except Exception as exp:
@@ -236,6 +317,17 @@ expected by the model {self.window}''')
 
 
 def tune_model(rnn_model: LSTM, path_to_data_file: str, show_plot: bool = False):
+    """
+    Tunes the provided model with different hyper parameters, at the end saves the weights of the
+    model in a state file named:
+        weights_only_{rnn_model.num_layers}_{rnn_model.hidden_layer_size}_{rnn_model.window}.pth
+
+    :param rnn_model: instance of LSTM class to tune / train.
+    :param path_to_data_file: path to the data file.
+    :param show_plot: whether to show the plot or not.
+
+    :return: nothing.
+    """
     rnn_model.load_data(path_to_data_file)
 
     hyper_parameters = {"epoch": [30, 20, 25], "batch_size": [5, 10, 50],
@@ -308,15 +400,21 @@ def tune_model(rnn_model: LSTM, path_to_data_file: str, show_plot: bool = False)
 
 
 def run_evaluations(rnn_model: LSTM, path_to_data_file: str):
+    """
+    Runs evaluation on the provided model using the test and validation model.
+    This method loads the best weights saved during the tunng phase.
+
+    :param rnn_model: instance of LSTM.
+    :param path_to_data_file: path to the data file.
+    :return: nothing.
+            exceptions when there are errors during evaluation with testing / validation set.
+    """
     try:
         rnn_model.to(dtype=torch.double)
         rnn_model.load_state_dict(torch.load(
             f"weights_only_{rnn_model.num_layers}_{rnn_model.hidden_layer_size}_{rnn_model.window}.pth"))
         rnn_model.load_data(path_to_data_file)
         print("\nTesting on the best model...")
-        # print("\nloss for train dataset:")
-        # result = evaluate_model(train_dtst, model_new, num_layer)
-        # print(f"{result['loss']:>7f}")
         print("\nloss for validation dataset:")
         result = rnn_model.evaluate_model(validation=True)
         print(f"{result['loss']:>7f}")

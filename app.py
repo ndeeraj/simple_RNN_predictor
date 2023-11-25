@@ -1,3 +1,4 @@
+# backend web service - flask app
 import os
 
 import torch
@@ -11,6 +12,12 @@ MODEL = None
 
 
 def create_app():
+    """
+    This method is the entry point for the flask application.
+    Call this method to create the app.
+
+    :return: flask application instance.
+    """
     global MODEL
     MODEL = LSTM(num_layers=2, hidden_layer_size=16)
     project_root = Path().resolve()
@@ -33,6 +40,20 @@ def create_app():
 
 @app.post('/predict_with_data')
 def predict_with_data():
+    """
+    Makes the predictions for the requested month and date using the previous data passed in the
+    data json
+    For a successful request, the data json should follow below constraints on the keys:
+    "year": (int) year > 2023
+    "month": (int) 1-12
+    "prev_data": (list of int) integers in a list of size 15 (window length used by the RNN)
+
+    :return:
+    on success, the response will have the data with,
+        key "results": contains a dict with keys representing the dates for which
+        the predictions were made and values representing predicted values for the date.
+    on error, returns data with error message in "error" key.
+    """
     global MODEL
     data = request.get_json()
 
@@ -47,6 +68,18 @@ def predict_with_data():
 
 @app.post('/predict_yy_mm')
 def predict_yy_mm():
+    """
+    Makes the predictions for the requested month and date in the data json
+    For a successful request, the data json should follow below constraints on the keys:
+    "year": (int) year 2023 or 2024
+    "month": (int) 1-12
+
+    :return:
+    on success, the response will have the data with,
+        key "results": contains a dict with keys representing the dates for which
+        the predictions were made and values representing predicted values for the date.
+    on error, returns data with error message in "error" key.
+    """
     global MODEL
     data = request.get_json()
 
