@@ -214,7 +214,7 @@ class LSTM(nn.Module):
                 self._plot_results(self.cache_results[req_yy_mm])
                 return self.cache_results[req_yy_mm]
 
-            data_end_date = date(2022, 12, 31)
+            data_end_date = date(2021, 12, 31)
             req_start_date = date(year, month, 1)
             num_predictions = int(((req_start_date - data_end_date) \
                                    + timedelta(days=calendar.monthrange(year, month)[1] - 1)).days)
