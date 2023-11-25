@@ -50,7 +50,7 @@ Run the model training script directly
 
 Note:
 - If you weren't successful in creating the flask app, then you can't use the UI. The results in this case can be found in the `demo.ipynb` notebook (you can try more operations in the notebook).
-- If you were successful in creating the flask app, but don't want to install the below prerequisites then the results from the curl commands.
+- If you were successful in creating the flask app, but don't want to install the below prerequisites then the results are the responses from the curl commands.
 
 #### Prerequisites:
 - needs Streamlit and altair packages, install using `pip install streamlit`, `pip install altair`
