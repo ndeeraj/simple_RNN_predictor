@@ -6,6 +6,12 @@ It also supports inference through a frontend developed using Streamlit and a ba
 If you face any problems during setup steps detailed below, you can reach out to me at `deeraj.nachimuthu@gmail.com` 
 Download this project and go to the root directory of the project.
 
+## Assumptions
+---------------
+- Predictions will be requested for months in the future with respect to the end date in the data i.e., 12/31/2021
+- The predictions will be made for a single month for each request i.e., here are no endpoints to predict for a year / x prdictions from y date. The way the code is written, it is easy to enable these endpoints but from reading the assignment, assumed that this was the expected behavior.
+- When providing past data points, it is expected to provide 15 values because the model is trained with this sequence length. The window was selected after several trial and errors, with minimal changes the model can be retrained to handle different window size.
+
 ## Starting the backend prediction service
 ---------------
 There are multiple ways the service can be started. If you face a problem with one approach, use the other one.
@@ -30,7 +36,7 @@ If you prefer to not use Docker to start the service, you can start the flask ap
 2. To verify if the service is working, use the curl commands in the file `curl_win_commands.txt` (this is formatted for windows cmd prompts, edit as necessary for other terminals) or alternatively create a similar request in postman or other tools. The server should repond with results for the requested month.
 
 ### If both approaches failed do this
-
+---------------
 Run the model training script directly
 
 #### Prerequisites:
@@ -39,52 +45,16 @@ Run the model training script directly
 1. Go to lstmregr.py and run the file.
 2. The script should tune the model and create a weights file, which can be manually loaded and used for inference as shown in `demo.ipynb`
 
+## Starting the frontend application
+---------------
+Note:
+- If you weren't successful in creating the flask app, then you can't use the UI. The results in this case can be found in the `demo.ipynb` notebook (you can try more operations in the notebook).
+- If you were successful in creating the flask app, but don't want to install the below prerequisites then the results from the curl commands.
 
- OpenCV python
-- Numpy
-- MeshLab / open3D - optional, only if you want to visualize the point cloud
+#### Prerequisites:
+- needs Streamlit and altair packages, install using `pip install streamlit`, `pip install altair`
 
-Setup for D2-Net
-----------
-
-- We have changed the files in D2-Net according to our use case and solved the deprecation errors, so no additional setup for D2-Net is required.
-- For our pipeline to work we need d2-net files which contain the features extracted for each image to be in the data directory, for instance, `[project root]/data/fountain-P11/images/`
-- If you do not find them, for each image you can generate them by going in to the d2-net directory in command-line and running the following command  `python extract_features.py --image_list_file images_feature_extract.txt`. NOTE: The text file assumes that you have the full dataset downloaded in the `[project root]/data` directory, If this is not the case, edit the file to include a particular dataset.
-
-Data setup
-----------
-We used data from https://github.com/openMVG/SfM_quality_evaluation.
-The script expects the data to be in [project root]/data/[fountain-P11], [project root]/data/[castle-P19] etc. 
-Make sure that there are no other sub folders in the data directory.
-
-In this repository, we have just submitted fountain-P11 dataset for demo purposes. the sfm script
-
-Running SfM using SIFT features
--------------------------------
-
-- run `python sfm.py -h` for help on the options.
-- To run the demo on "fountain-P11", execute `python sfm.py --demo --features SIFT`
-- To run for the entire dataset, execute `python sfm.py --no-demo --features SIFT`
-- The point cloud `.ply` file will be generated in [project-root]/results/SIFT/[dataset name]/point-clouds
-
-Running SfM using CNN features
--------------------------------
-
-- run `python sfm.py -h` for help on the options.
-- To run the demo on "fountain-P11", execute `python sfm.py --demo --features CNN --ext d2-net`
-- To run for the entire dataset, execute `python sfm.py --no-demo --features CNN --ext d2-net`
-- The point cloud `.ply` file will be generated in [project-root]/results/CNN/[dataset name]/point-clouds
-
-Visualizing point clouds
-------------------------
-
-- If you installed open3D, you can use the results script as  `python results.py [SIFT|CNN] [dataset name]` like `python results.py SIFT fountain-P11`. The script expects the `.ply` files to be in [project-root]/results/SIFT/fountain-P11
-- You can also load up the highest numbered `.ply` file in MeshLab to visualize.
-- In either method, you would need to zoom and rotate the points to see the reconstructions clearly.
-- The results we obtained for few dataset are in `results\cloud_point_visualization`
+  1. From the root directory of the project, run the application using `streamlit run front_end_app.py`
+  2. If successful, a browser window should open where you can interact with the service by entering "year",  "month", "past data" (Optional: at least 15 values must be entered as comma separated values to make predictions for the "year" and "month" requested.)
 
 
-Evaluating the results obtained
-------------------------
-
-- The results obtained from both the methods are evaluated with COLMAP as the baseline and it can be seen in the Evaluation_metric and results.ipynb it requires pytorch3D
