@@ -36,14 +36,13 @@ text = st.text_input('Past data (comma separated values):',
                      f"enter at least {window} values to predict using this data")
 
 prev_data = []
-if len(text.strip()) > 0:
-    try:
-        prev_data = [int(data_str.strip()) for data_str in text.split(',')]
-    except:
-        st.error(f"Please enter {window} valid numbers in comma separated format.")
 
 if st.button("Predict", type="primary"):
-    # get_predictions_from_service = False
+    if len(text.strip()) > 0:
+        try:
+            prev_data = [int(data_str.strip()) for data_str in text.split(',')]
+        except:
+            st.error(f"Please enter {window} valid numbers in comma separated format.")
     if len(prev_data) != window and year > 2023:
         st.error("Without entering previous data, you can only predict for 2022 and 2023. \
         Because the data used for developing the model is not extensive to predict meaningfully \
