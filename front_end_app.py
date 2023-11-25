@@ -46,7 +46,9 @@ if st.button("Predict", type="primary"):
         url = 'http://localhost:5000/predict_yy_mm'
         data = {"year": year, "month": month}
         results = requests.post(url, json=data).json()
-        display_results(results)
+        print(results)
+        if results.get("error") is None:
+            display_results(results)
     else:
         try:
             prev_data = [int(data_str.strip()) for data_str in text.split(',')]
@@ -56,7 +58,8 @@ if st.button("Predict", type="primary"):
                 "year": year,
                 "month": month}
             results = requests.post(url, json=data).json()
-            display_results(results)
+            if results.get("error") is None:
+                display_results(results)
         except:
             st.error(f"Please enter {window} valid numbers in comma separated format.")
 
