@@ -33,30 +33,30 @@ window = 15
 year = st.number_input('Year:', value=2022, format="%d", min_value=2022)
 month = st.number_input('Month:', value=1, format="%d", min_value=1, max_value=12)
 text = st.text_input('Past data (comma separated values):',
-                     f"enter at least {window} values to predict using this data")
+                     help=f"enter at least {window} values to predict using this data")
 
 prev_data = []
 
 if st.button("Predict", type="primary"):
-    if len(text.strip()) > 0:
-        try:
-            prev_data = [int(data_str.strip()) for data_str in text.split(',')]
-        except:
-            st.error(f"Please enter {window} valid numbers in comma separated format.")
-    if len(prev_data) != window and year > 2023:
-        st.error("Without entering previous data, you can only predict for 2022 and 2023. \
-        Because the data used for developing the model is not extensive to predict meaningfully \
-        beyond that point.")
-    elif len(prev_data) == 0:
+    if len(text.strip()) == 0:
+        if year > 2023:
+            st.error("Without entering previous data, you can only predict for 2022 and 2023. \
+            Because the data used for developing the model is not extensive to predict meaningfully \
+            beyond that point.")
         url = 'http://localhost:5000/predict_yy_mm'
         data = {"year": year, "month": month}
         results = requests.post(url, json=data).json()
         display_results(results)
-    elif len(prev_data) == window:
-        url = 'http://localhost:5000/predict_with_data'
-        data = {
-            "prev_data": prev_data,
-            "year": year,
-            "month": month}
-        results = requests.post(url, json=data).json()
-        display_results(results)
+    else:
+        try:
+            prev_data = [int(data_str.strip()) for data_str in text.split(',')]
+            url = 'http://localhost:5000/predict_with_data'
+            data = {
+                "prev_data": prev_data,
+                "year": year,
+                "month": month}
+            results = requests.post(url, json=data).json()
+            display_results(results)
+        except:
+            st.error(f"Please enter {window} valid numbers in comma separated format.")
+
