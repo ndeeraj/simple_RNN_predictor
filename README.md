@@ -8,13 +8,13 @@ If you face any problems during setup steps detailed below, you can reach out to
 Download this project and go to the root directory of the project.
 
 ## Assumptions
----------------
+
 - Predictions will be requested for months in the future with respect to the end date in the data i.e., 12/31/2021
 - The predictions will be made for a single month for each request i.e., here are no endpoints to predict for a year / x prdictions from y date. The way the code is written, it is easy to enable these endpoints but from reading the assignment, assumed that this was the expected behavior.
 - When providing past data points, it is expected to provide 15 values because the model is trained with this sequence length. The window was selected after several trial and errors, with minimal changes the model can be retrained to handle different window size.
 
 ## Starting the backend prediction service
----------------
+
 There are multiple ways the service can be started. If you face a problem with one approach, use the other one.
 
 ### Running the application through Docker
@@ -47,7 +47,7 @@ Run the model training script directly
 2. The script should tune the model and create a weights file, which can be manually loaded and used for inference as shown in `demo.ipynb`
 
 ## Starting the frontend application
----------------
+
 Note:
 - If you weren't successful in creating the flask app, then you can't use the UI. The results in this case can be found in the `demo.ipynb` notebook (you can try more operations in the notebook).
 - If you were successful in creating the flask app, but don't want to install the below prerequisites then the results from the curl commands.
