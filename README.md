@@ -15,7 +15,7 @@ Clone this project and go to the root directory of the project.
 
 ## Starting the backend prediction service
 
-There are multiple ways the service can be started. If you face a problem with one approach, use the other one. Once the web service is up, move to the next section to run the UI application. 
+There are multiple ways the service can be started. If you face a problem with one approach, use the other one. Once the web service is up, move to the next section to run the UI application. \
 
 **Note: all these methods start the model by loading the pretrained weights stored in the file `weights_only_2_16_15.pth`. If you want the model to be trained on startup / while running the program, just delete this file from the project and follow the steps.**
 
