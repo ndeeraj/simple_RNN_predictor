@@ -30,9 +30,9 @@ def display_results(disp_results: dict):
 
 
 window = 15
-year = st.number_input('Year:', value=2022, format="%d", min_value=2022)
-month = st.number_input('Month:', value=1, format="%d", min_value=1, max_value=12)
-text = st.text_input('Past data (comma separated values):',
+year = st.number_input('Year (required):', value=2022, format="%d", min_value=2022)
+month = st.number_input('Month (required):', value=1, format="%d", min_value=1, max_value=12)
+text = st.text_input('Past data (optional; comma separated values):',
                      help=f"enter at least {window} values to predict using this data")
 
 prev_data = []
