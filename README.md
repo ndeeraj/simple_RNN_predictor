@@ -10,7 +10,7 @@ Clone this project and go to the root directory of the project.
 ## Assumptions
 
 - Predictions will be requested for months in the future with respect to the end date in the data i.e., 12/31/2021
-- The predictions will be made for a single month for each request i.e., here are no endpoints to predict for a year / x prdictions from y date. The way the code is written, it is easy to enable these endpoints but from reading the assignment, assumed that this was the expected behavior. To get an year of predictions, we can call the `predict_yy_mm` endpoint repeatedly with different month values.
+- The predictions will be made for a single month for each request i.e., there are no endpoints to predict for a year / x predictions from y date. The way the code is written, it is easy to enable these endpoints but from reading the assignment, assumed that this was the expected behavior. To get an year of predictions, we can call the `predict_yy_mm` endpoint repeatedly with different month values.
 - When providing past data points, it is expected to provide 15 values because the model is trained with this sequence length. The window was selected after several trial and errors, with minimal changes the model can be retrained to handle different window size.
 
 ## Starting the backend prediction service
@@ -50,7 +50,7 @@ Run the model training script directly
 
 Note:
 - If you weren't successful in creating the flask app, then you can't use the UI. The results in this case can be found in the `demo.ipynb` notebook (you can try more operations in the notebook).
-- If you were successful in creating the flask app, but don't want to install the below prerequisites then the results from the curl commands.
+- If you were successful in creating the flask app, but don't want to install the below prerequisites then the results are the responses from the curl commands.
 
 #### Prerequisites:
 - needs Streamlit and altair packages, install using `pip install streamlit`, `pip install altair`
