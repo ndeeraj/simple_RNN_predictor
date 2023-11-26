@@ -15,7 +15,8 @@ Clone this project and go to the root directory of the project.
 
 ## Starting the backend prediction service
 
-There are multiple ways the service can be started. If you face a problem with one approach, use the other one.
+There are multiple ways the service can be started. If you face a problem with one approach, use the other one. Once the web service is up, move to the next section to run the UI application. 
+**Note: all these methods start the model by loading the pretrained weights stored in the file `weights_only_2_16_15.pth`. If you want the model to be trained on startup / while running the program, just delete this file from the project and follow the steps.**
 
 ### Running the application through Docker
 
@@ -46,13 +47,13 @@ Run the model training script directly
 #### Prerequisites:
 - Install the dependencies in requirements.txt using `pip install -r requirements.txt`
 
-1. Go to lstmregr.py and run the file.
+1. From the root directory of the project, run the file lstmregr.py using `python lstmregr.py`.
 2. The script should tune the model and create a weights file, which can be manually loaded and used for inference as shown in `demo.ipynb`
 
 ## Starting the frontend application
 
 Note:
-- If you weren't successful in creating the flask app, then you can't use the UI. The results in this case can be found in the `demo.ipynb` notebook (you can try more operations in the notebook).
+- If you weren't successful in creating the flask app, then you can't use the UI because it depends on the web service. The results in this case can be found in the `demo.ipynb` notebook (you can try more operations in the notebook).
 - If you were successful in creating the flask app, but don't want to install the below prerequisites then the results are the responses from the curl commands.
 
 #### Prerequisites:
