@@ -18,6 +18,7 @@ Clone this project and go to the root directory of the project.
 There are multiple ways the service can be started. If you face a problem with one approach, use the other one.
 
 ### Running the application through Docker
+
 ---------------
 #### Prerequisites:
 - Docker
@@ -27,6 +28,7 @@ There are multiple ways the service can be started. If you face a problem with o
 3. To verify if the service is working, use the curl commands in the file `curl_win_commands.txt` (this is formatted for windows cmd prompts, edit as necessary for other terminals) or alternatively create a similar request in postman or other tools. The server should repond with results for the requested month.
 
 ### Running the application through flask directly
+
 ---------------
 If you prefer to not use Docker to start the service, you can start the flask application locally.
 
@@ -37,6 +39,7 @@ If you prefer to not use Docker to start the service, you can start the flask ap
 2. To verify if the service is working, use the curl commands in the file `curl_win_commands.txt` (this is formatted for windows cmd prompts, edit as necessary for other terminals) or alternatively create a similar request in postman or other tools. The server should repond with results for the requested month.
 
 ### If both approaches failed do this
+
 ---------------
 Run the model training script directly
 
