@@ -27,7 +27,7 @@ There are multiple ways the service can be started. If you face a problem with o
 
 1. From the root directory of the project, build the docker image `docker build -t backend_flask_image .`
 2. Start a container with the image `docker run -p 5000:5000 --name backend_flask_app backend_flask_image`
-3. To verify if the service is working, use the curl commands in the file `curl_win_commands.txt` (this is formatted for windows cmd prompts, edit as necessary for other terminals) or alternatively create a similar request in postman or other tools. The server should repond with results for the requested month.
+3. To verify if the service is working, use the curl commands in the file `curl_win_commands.txt` (this is formatted for windows cmd prompts, edit as necessary for other terminals) or alternatively create a similar request in postman or other tools. The server should respond with results for the requested month.
 
 ### Running the application through flask directly
 
@@ -58,7 +58,7 @@ Note:
 - If you were successful in creating the flask app, but don't want to install the below prerequisites then the results are the responses from the curl commands.
 
 #### Prerequisites:
-- needs Streamlit and altair packages, install using `pip install streamlit`, `pip install altair`
+- Streamlit and altair packages, install using `pip install streamlit`, `pip install altair`
 
 1. From the root directory of the project, run the application using `streamlit run front_end_app.py`
 2. If successful, a browser window should open where you can interact with the service by entering "year",  "month", "past data" (Optional: at least 15 values must be entered as comma separated values to make predictions for the "year" and "month" requested.)
